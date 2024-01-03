@@ -1,25 +1,26 @@
-import {initialCards} from './scripts/cards.js';
+import { initialCards } from './scripts/cards.js';
+import { popupOpen } from './scripts/modal.js';
 import './pages/index.css';
+import { addCard, deleteCard, like, handlerCardOpen } from './scripts/card.js';
 
-// @todo: Темплейт карточки
-const cardTemplate = document.querySelector('#card-template').content;
-// @todo: DOM узлы
 const placesList = document.querySelector('.places__list');
-// @todo: Функция создания карточки
-function addCard(title, image, deleteCard) {
-    const cardElement = cardTemplate.querySelector('.card').cloneNode(true);
-    const deleteButton = cardElement.querySelector('.card__delete-button');
-    cardElement.querySelector('.card__title').textContent = title;
-    cardElement.querySelector('.card__image').src = image;
-    cardElement.querySelector('.card__image').alt = title;
-    deleteButton.addEventListener('click', deleteCard);
-    return cardElement;
-}
-// @todo: Функция удаления карточки
-function deleteCard(event) {
-    event.target.closest('.card').remove();
-}
-// @todo: Вывести карточки на страницу
+
 initialCards.forEach( item => {
-    placesList.append(addCard(item.name, item.link, deleteCard));
+    placesList.append(addCard(item.name, item.link, deleteCard, like, handlerCardOpen));
 })
+
+// const profileArea = document.querySelector('.profile');
+const editButton = document.querySelector('.profile__edit-button');
+const addButton = document.querySelector('.profile__add-button');
+// const popupEdit = document.querySelector('.popup_type_edit');
+// const popupAdd = document.querySelector('.popup_type_new-card');
+// const popupCard = document.querySelector('.popup_type_image');
+// const popupEditClose = popupEdit.querySelector('.popup__close');
+// const popupAddClose = popupAdd.querySelector('.popup__close');
+// const popupCardClose = popupCard.querySelector('.popup__close');
+
+editButton.addEventListener('click', popupOpen);
+
+addButton.addEventListener('click', popupOpen);
+
+placesList.addEventListener('click', popupOpen);
