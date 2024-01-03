@@ -21,7 +21,6 @@ popupList.forEach(item => {
 
 export function popupOpen(evt) {
     if (evt.target === editButton) {
-        // popupEdit.classList.add('popup_is-animated');
         const popupName = formEdit.elements.name;
         const popupDesc = formEdit.elements.description;
         popupName.value = profileName.textContent;
@@ -31,8 +30,6 @@ export function popupOpen(evt) {
         
         popupClose(popupEditClose, popupEdit);
     } else if (evt.target === addButton) {
-        // popupAdd.classList.add('popup_is-animated');
-        formAdd.elements.link.value = 'https://wallpapershome.ru/images/pages/pic_h/21485.jpg';     // НЕ ЗАБЫТЬ УДАЛИТЬ ПЕРЕД РЕВЬЮ
         popupAdd.classList.add('popup_is-opened');
         popupClose(popupAddClose, popupAdd);
     } else if (evt.target.classList.contains('card__image')) {

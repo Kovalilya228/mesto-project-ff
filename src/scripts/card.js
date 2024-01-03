@@ -28,6 +28,5 @@ export function handlerCardOpen(evt) {
     const popupCard = document.querySelector('.popup_type_image');
     popupCard.querySelector('.popup__image').src = evt.target.src;
     popupCard.querySelector('.popup__caption').textContent = evt.target.closest('.card').querySelector('.card__title').textContent;
-    // popupCard.classList.add('popup_is-animated');
     popupCard.classList.add('popup_is-opened');
 }
