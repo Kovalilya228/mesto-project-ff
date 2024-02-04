@@ -9,7 +9,6 @@ export function closePopup(popup) {
 }
 
 export function closeOnBackdrop(evt) {
-    console.log(evt.target);
     if (evt.target.classList.contains('popup__close') || evt.target === evt.currentTarget) {
         closePopup(evt.currentTarget);
     }

@@ -1,6 +1,7 @@
 import { initialCards } from './scripts/cards.js';
 import { openPopup, closePopup, closeOnBackdrop } from './scripts/modal.js';
-import { createCard, deleteCard, like} from './scripts/card.js';
+import { createCard, deleteCard, like } from './scripts/card.js';
+import { enableValidation, clearValidation } from './scripts/validation.js';
 import './pages/index.css';
 
 const placesList = document.querySelector('.places__list');
@@ -13,6 +14,13 @@ const formEdit = document.forms["edit-profile"];
 const formAdd = document.forms["new-place"];
 const profileName = document.querySelector('.profile__title');
 const profileDesc = document.querySelector('.profile__description');
+
+
+document.querySelectorAll('.popup__input').forEach(item => {
+    item.addEventListener('input', (evt) => {
+        enableValidation(evt.target);
+    })
+})
 
 popupList.forEach(popup => {
     popup.classList.add('popup_is-animated');
