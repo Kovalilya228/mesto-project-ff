@@ -10,12 +10,20 @@ export function closePopup(popup) {
 
 export function closeOnBackdrop(evt) {
     if (evt.target.classList.contains('popup__close') || evt.target === evt.currentTarget) {
+        const inputList = Array.from(evt.currentTarget.querySelectorAll('.popup__input'));
+        inputList.forEach(inputElement => {
+            inputElement.value = '';
+        })
         closePopup(evt.currentTarget);
     }
 }
 
 function closeModalOnEsc(evt) {
     if (evt.key === 'Escape') {
+        const inputList = Array.from(evt.currentTarget.querySelectorAll('.popup__input'));
+        inputList.forEach(inputElement => {
+            inputElement.value = '';
+        })
         closePopup(document.querySelector('.popup_is-opened'));
     }
 }
