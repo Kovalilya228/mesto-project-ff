@@ -18,13 +18,6 @@ const formAvatar = document.forms["edit-avatar"];
 const profileName = document.querySelector('.profile__title');
 const profileDesc = document.querySelector('.profile__description');
 const profileImage = document.querySelector('.profile__image');
-const validationConfig = {
-    formSelector: '.popup__form',
-    inputSelector: '.popup__input',
-    submitButtonSelector: '.popup__button',
-    inputErrorClass: 'popup__input_type_error',
-    errorClass: 'popup__error_visible'
-};
 
 popupList.forEach( popup => {
     popup.classList.add('popup_is-animated');
@@ -36,12 +29,12 @@ editButton.addEventListener('click', () => {
     const popupDesc = formEdit.elements.description;
     popupName.value = profileName.textContent;
     popupDesc.value = profileDesc.textContent;
-    clearValidation(formEdit, validationConfig);
+    clearValidation(formEdit);
     openPopup(popupEdit);
 });
 
 addButton.addEventListener('click', () => {
-    clearValidation(formAdd, validationConfig);
+    clearValidation(formAdd);
     openPopup(popupAdd);
 });
 
@@ -54,7 +47,7 @@ avatarButton.addEventListener('click', () => {
     .catch((err) => {
         console.log(err);
     })
-    clearValidation(formAvatar, validationConfig);
+    clearValidation(formAvatar);
     openPopup(popupAvatar);
 });
 
@@ -151,5 +144,4 @@ formAvatar.addEventListener('submit', (evt) => {
     }
 );
 
-enableValidation(validationConfig);
-
+enableValidation();
