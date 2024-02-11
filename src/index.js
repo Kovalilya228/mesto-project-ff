@@ -18,6 +18,14 @@ const formAvatar = document.forms["edit-avatar"];
 const profileName = document.querySelector('.profile__title');
 const profileDesc = document.querySelector('.profile__description');
 const profileImage = document.querySelector('.profile__image');
+const validationConfig = {
+    formSelector: '.popup__form',
+    inputSelector: '.popup__input',
+    submitButtonSelector: '.popup__button',
+    inputErrorClass: 'popup__input_type_error',
+    errorClass: 'popup__error_visible'
+};
+let userId;
 
 popupList.forEach( popup => {
     popup.classList.add('popup_is-animated');
@@ -25,20 +33,23 @@ popupList.forEach( popup => {
 })
 
 editButton.addEventListener('click', () => {
+    formEdit.reset();
     const popupName = formEdit.elements.name;
     const popupDesc = formEdit.elements.description;
     popupName.value = profileName.textContent;
     popupDesc.value = profileDesc.textContent;
-    clearValidation(formEdit);
+    clearValidation(formEdit, validationConfig);
     openPopup(popupEdit);
 });
 
 addButton.addEventListener('click', () => {
-    clearValidation(formAdd);
+    formAdd.reset();
+    clearValidation(formAdd, validationConfig);
     openPopup(popupAdd);
 });
 
 avatarButton.addEventListener('click', () => {
+    formAvatar.reset();
     const avatarLink = formAvatar.elements.link;
     getUserData()
     .then( userData => {
@@ -47,7 +58,7 @@ avatarButton.addEventListener('click', () => {
     .catch((err) => {
         console.log(err);
     })
-    clearValidation(formAvatar);
+    .finally(clearValidation(formAvatar, validationConfig));
     openPopup(popupAvatar);
 });
 
@@ -66,11 +77,11 @@ function handleFormEditSubmit(evt) {
     .then(userData => {
         profileName.textContent = userData.name;
         profileDesc.textContent = userData.about;
-        formEdit.elements.submit.textContent = 'Сохранить';
     })
     .catch((err) => {
         console.log(err);
-    });
+    })
+    .finally(formEdit.elements.submit.textContent = 'Сохранить');
     closePopup(popupEdit);
 }
 
@@ -78,14 +89,14 @@ function handleFormAddSubmit(evt) {
     evt.preventDefault();
     const popupPlaceName = formAdd.elements['place-name'];
     const popupLink = formAdd.elements.link;
-    Promise.all([getUserData(), addNewCard(popupPlaceName.value, popupLink.value)])
-    .then(([userData, card]) => {
-        placesList.prepend(createCard(card.name, card.link, deleteCard, likeCard, dislikeCard, handlerCardOpen, card, userData));
-        formAdd.elements.submit.textContent = 'Сохранить';
+    addNewCard(popupPlaceName.value, popupLink.value)
+    .then(card => {
+        placesList.prepend(createCard(deleteCard, likeCard, dislikeCard, handlerCardOpen, card, userId));
     })
     .catch((err) => {
         console.log(err);
-    });
+    })
+    .finally(formAdd.elements.submit.textContent = 'Сохранить');
     closePopup(popupAdd);
     formAdd.reset();
 }
@@ -96,27 +107,23 @@ function handleFormAvatarSubmit(evt) {
     editAvatar(popupLink.value)
     .then(res => {
         profileImage.setAttribute('style', `background-image: url(${res.avatar});`);
-        formAvatar.elements.submit.textContent = 'Сохранить';
     })
     .catch((err) => {
         console.log(err);
-    });
+    })
+    .finally(formAvatar.elements.submit.textContent = 'Сохранить');
     closePopup(popupAvatar);
 }
 
 function setInitialData() {
     Promise.all([getUserData(), getCardsData()])
         .then(([userData, cards]) => {
+            userId = userData._id;
             profileName.textContent = userData.name;
             profileDesc.textContent = userData.about;
             profileImage.setAttribute('style', `background-image: url(${userData.avatar});`);
             cards.forEach(card => {
-                placesList.append(createCard(card.name, card.link, deleteCard, likeCard, dislikeCard, handlerCardOpen, card, userData));
-                if (card.owner._id !== userData._id) {
-                    const cards = Array.from(placesList.querySelectorAll('.card'));
-                    const lastCard = cards[cards.length - 1];
-                    lastCard.querySelector('.card__delete-button').setAttribute('style', 'display:none;');
-                }
+                placesList.append(createCard(deleteCard, likeCard, dislikeCard, handlerCardOpen, card, userId));
             })
         })
         .catch((err) => {
@@ -144,4 +151,4 @@ formAvatar.addEventListener('submit', (evt) => {
     }
 );
 
-enableValidation();
+enableValidation(validationConfig);

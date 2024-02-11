@@ -1,19 +1,11 @@
-const config = {
-    formSelector: '.popup__form',
-    inputSelector: '.popup__input',
-    submitButtonSelector: '.popup__button',
-    inputErrorClass: 'popup__input_type_error',
-    errorClass: 'popup__error_visible'
-};
-
-export function enableValidation () {
+export function enableValidation (config) {
     const formList = Array.from(document.querySelectorAll(config.formSelector));
     formList.forEach(formElement => {
         setEventListeners(formElement, config);
     })
 }
 
-export function clearValidation(formElement) {
+export function clearValidation(formElement, config) {
     const inputList = Array.from(formElement.querySelectorAll(config.inputSelector));
     inputList.forEach(inputElement => {
         const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
@@ -22,41 +14,39 @@ export function clearValidation(formElement) {
     toggleButtonState(inputList, formElement.submit);
 }
 
-const setEventListeners = (formElement) => {
+const setEventListeners = (formElement, config) => {
     const inputList = Array.from(formElement.querySelectorAll(config.inputSelector));
     const buttonElement = formElement.submit;
     toggleButtonState(inputList, buttonElement);
     inputList.forEach((inputElement) => {
       inputElement.addEventListener('input', function () {
-        checkInputValidity(formElement, inputElement);
+        checkInputValidity(formElement, inputElement, config);
         toggleButtonState(inputList, buttonElement);
       });
     });
   };
 
-function checkInputValidity (formElement, inputElement) {
+function checkInputValidity (formElement, inputElement, config) {
     const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
     if (inputElement.validity.patternMismatch) {
         inputElement.setCustomValidity(inputElement.dataset.patternMismatch);
-    } else if (inputElement.validity.valueMissing) {
-        inputElement.setCustomValidity(inputElement.dataset.valueMissing);
     } else {
         inputElement.setCustomValidity('');
     }
     if (!inputElement.validity.valid) {
-        showInputError(inputElement, errorElement, inputElement.validationMessage);
+        showInputError(inputElement, errorElement, inputElement.validationMessage, config);
     } else {
-        hideInputError(inputElement, errorElement);
+        hideInputError(inputElement, errorElement, config);
     }
 }
 
-function showInputError (element, errorElement, errorMessage) {
+function showInputError (element, errorElement, errorMessage, config) {
     element.classList.add(config.inputErrorClass);
     errorElement.textContent = errorMessage;
     errorElement.classList.add(config.errorClass);
 }
 
-function hideInputError (element, errorElement) {
+function hideInputError (element, errorElement, config) {
     element.classList.remove(config.inputErrorClass);
     errorElement.classList.remove(config.errorClass);
     errorElement.textContent = '';
