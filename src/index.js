@@ -1,5 +1,5 @@
 import { openPopup, closePopup, closeOnBackdrop } from './scripts/modal.js';
-import { createCard } from './scripts/card.js';
+import { createCard, likeCardHandler, deleteCardHandler } from './scripts/card.js';
 import { enableValidation, clearValidation } from './scripts/validation.js';
 import { getUserData, getCardsData, changeUserData, addNewCard, deleteCard, likeCard, dislikeCard, editAvatar } from './scripts/api.js';
 import './pages/index.css';
@@ -91,7 +91,7 @@ function handleFormAddSubmit(evt) {
     const popupLink = formAdd.elements.link;
     addNewCard(popupPlaceName.value, popupLink.value)
     .then(card => {
-        placesList.prepend(createCard(deleteCard, likeCard, dislikeCard, handlerCardOpen, card, userId));
+        placesList.prepend(createCard(deleteCardHandler, likeCardHandler, handlerCardOpen, card, userId, likeCard, dislikeCard, deleteCard));
     })
     .catch((err) => {
         console.log(err);
@@ -123,7 +123,7 @@ function setInitialData() {
             profileDesc.textContent = userData.about;
             profileImage.setAttribute('style', `background-image: url(${userData.avatar});`);
             cards.forEach(card => {
-                placesList.append(createCard(deleteCard, likeCard, dislikeCard, handlerCardOpen, card, userId));
+                placesList.append(createCard(deleteCardHandler, likeCardHandler, handlerCardOpen, card, userId, likeCard, dislikeCard, deleteCard));
             })
         })
         .catch((err) => {

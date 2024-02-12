@@ -16,10 +16,6 @@ export function closeOnBackdrop(evt) {
 
 function closeModalOnEsc(evt) {
     if (evt.key === 'Escape') {
-        const inputList = Array.from(evt.currentTarget.querySelectorAll('.popup__input'));
-        inputList.forEach(inputElement => {
-            inputElement.value = '';
-        })
         closePopup(document.querySelector('.popup_is-opened'));
     }
 }
